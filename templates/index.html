@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cupcakes</title>
+</head>
+<body>
+  <h1>Cupcakes</h1>
+
+  <!-- Area for list of cupcakes -->
+ <div id="cupcakes"></div>
+
+
+ <!-- Form for adding a cupcake -->
+ <form action="/api/cupcakes" method="POST" id="cupcakes-form">
+
+  <label for="flavor">Flavor</label>
+  <input type="text" id="flavor" name="flavor" required>
+
+  <label for="size">Size</label>
+  <select name="size" id="size">
+    <option value="small">Small</option>
+    <option value="medium">Medium</option>
+    <option value="large">Large</option>
+  </select>
+
+  <label for="rating">Rating</label>
+  <select name="rating" id="rating">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+  </select>
+
+  <label for="image">Image URL</label>
+  <input type="url" id="image" name="image">
+
+  <button type="submit" class="cupcakes-button">Add Cupcake</button>
+
+ </form>
+
+<script src="https://unpkg.com/jquery"></script>
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script src="static/cupcakes.js"></script>
+</body>
+</html>
