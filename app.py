@@ -14,9 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cupcakes'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 connect_db(app)
-db.create_all()
-
-
+# db.create_all() /tables created in the seed.py already
 
 
 @app.get("/api/cupcakes")
@@ -77,7 +75,7 @@ def create_cupcake():
     flavor = request.json["flavor"]
     size = request.json["size"]
     rating = request.json["rating"]
-    image = request.json["image"]
+    image = request.json.get("image")
 
     new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
 
@@ -87,3 +85,43 @@ def create_cupcake():
     serialized = new_cupcake.serialize()
 
     return (jsonify(cupcake=serialized), 201)
+
+@app.patch("/api/cupcakes/<int:cupcake_id>")
+def update_cupcake(cupcake_id):
+    """Update cupcake and return JSON.
+        {"cupcake":
+            {
+                "id",
+                "flavor",
+                "size",
+                "rating",
+                "image"
+            }
+        }
+    """
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    cupcake.flavor = request.json.get("flavor", cupcake.flavor)
+    cupcake.size = request.json.get("size", cupcake.size)
+    cupcake.rating = request.json.get("rating", cupcake.rating)
+    cupcake.image = request.json.get("image", cupcake.image)
+
+    db.session.commit()
+
+    serialized = cupcake.serialize()
+
+    return jsonify(cupcake=serialized)
+
+@app.delete("/api/cupcakes/<int:cupcake_id>")
+def delete_cupcake(cupcake_id):
+    """Delete cupcake and return JSON.
+        {"deleted": cupcake_id}
+    """
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    Cupcake.query.filter_by(id=cupcake_id).delete()
+
+    db.session.commit()
+
+    return jsonify(deleted=cupcake.id)
+
