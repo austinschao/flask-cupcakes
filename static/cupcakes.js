@@ -17,16 +17,17 @@ async function getCupcakes() {
     method: "GET"
   });
 
+  return response.data.cupcakes;
 
-  return response.data.cupcakes.map(cupcake => {
-    return {
-      id: cupcake.id,
-      flavor: cupcake.flavor,
-      size: cupcake.size,
-      rating: cupcake.rating,
-      image: cupcake.image
-    }
-  });
+  // (cupcake => {
+  //   return {
+  //     id: cupcake.id,
+  //     flavor: cupcake.flavor,
+  //     size: cupcake.size,
+  //     rating: cupcake.rating,
+  //     image: cupcake.image
+  //   }
+  // });
 }
 
 
@@ -34,7 +35,6 @@ async function getCupcakes() {
 /**  */
 
 function populateCupcakes(cupcakes) {
-
   for (let cupcake of cupcakes) {
     const $cupcake = $(
       `<div id='${cupcake.id}'>
@@ -56,11 +56,34 @@ function populateCupcakes(cupcakes) {
 
 async function display_cupcakes() {
   $cupCakes.empty();
+
   const cupcakes = await getCupcakes();
-  debugger;
   populateCupcakes(cupcakes);
 }
 
+/** Add cupcake to API database */
+async function addCupcake() {
+  const flavor = $('.flavor').val;
+  const size = $('.size').val;
+  const rating = $('.rating').val;
+  const image = $('.image').val;
+
+  const response = await axios({
+    url: `${API_BASE_URL}/api/cupcakes`,
+    method: "POST",
+    Headers:'application/json',
+    data: {
+      "flavor": flavor,
+      "size": size,
+      "rating": rating,
+      "image": image
+    }
+  });
+
+  display_cupcakes();
+  return response.data;
+
+}
 
 
 /** Create an event listener for adding a cupcake */
