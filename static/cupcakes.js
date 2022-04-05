@@ -5,7 +5,7 @@
 const $cupCakes = $("#cupcakes");
 const $cupCakesForm = $("#cupcakes-form");
 
-const API_BASE_URL = "http://localhost:5001/"
+const API_BASE_URL = "http://localhost:5001"
 
 
 /** Retrieve list of cupcakes from API  */
@@ -62,35 +62,40 @@ async function display_cupcakes() {
 }
 
 /** Add cupcake to API database */
-async function addCupcake() {
-  const flavor = $('.flavor').val;
-  const size = $('.size').val;
-  const rating = $('.rating').val;
-  const image = $('.image').val;
+async function addCupcake(evt) {
+  evt.preventDefault();
+  const flavor = $('#flavor').val();
+  const size = $('#size').val();
+  const rating = $('#rating').val();
+  const image = $('#image').val();
 
-  const response = await axios({
-    url: `${API_BASE_URL}/api/cupcakes`,
-    method: "POST",
-    Headers:'application/json',
-    data: {
-      "flavor": flavor,
-      "size": size,
-      "rating": rating,
-      "image": image
-    }
-  });
+  const response = await axios.post(
+    `${API_BASE_URL}/api/cupcakes`, {
+          "flavor": flavor,
+          "size": size,
+          "rating": rating,
+          "image": image
+        })
+  // const response = await axios({
+  //   url: `${API_BASE_URL}/api/cupcakes`,
+  //   method: "POST",
+
+  //   data: {
+  //     "flavor": flavor,
+  //     "size": size,
+  //     "rating": rating,
+  //     "image": image
+  //   }
+  // });
 
   display_cupcakes();
-  return response.data;
-
+  console.log("Response=", response.data)
+  // return response.data;
 }
 
 
 /** Create an event listener for adding a cupcake */
 
-// $cupCakesForm.on('click', '.cupcakes-button', {
-//   evt.preventDefault();
-// } )
-
+$cupCakesForm.on('click', '.cupcakes-button', addCupcake)
 
 display_cupcakes();
